@@ -2,6 +2,7 @@ import os
 import time
 import imaplib
 import email
+from email.parser import HeaderParser
 import traceback 
 from dotenv import load_dotenv
 from datetime import datetime
@@ -14,7 +15,7 @@ load_dotenv()
 
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=3):
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=30):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -45,7 +46,10 @@ def gmail_archive_and_expunge(email_address):
         raw_email = data[0][1]
         raw_email_string = raw_email.decode('ISO-8859-1')
         email_message = email.message_from_string(raw_email_string)
-        print(email_message, 47)
+        parser = HeaderParser()
+        h = parser.parsestr(raw_email_string)
+        for header_key in h.keys():
+            all_object['raw_'+header_key] = h[header_key]
         all_object = roles_with_subject(raw_email_string, all_object)
         date = email_message['Date']
         parsed = eut.parsedate(date)
@@ -74,11 +78,9 @@ def gmail_archive_and_expunge(email_address):
                     fp.close()
         all_object['files'] = file_names 
         all_object['uid'] = email_id
-        all_object['email_message'] = email_message
-        email_json = json.dumps(all_object)
-        print(email_json)
         return all_object
 
     for mail_id in mail_ids:
         msg = get_email_msg(mail_id)
+        print(msg, 85)
 
