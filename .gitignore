@@ -1,8 +1,15 @@
+joelholmbergdotcom-271104-4603faf115eb.json
+joelholmbergdotcom-271104-6dd0603ebc15.json
+joelholmbergdotcom-firebase-adminsdk-8j2c3-3abe7eb64f.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
+.vim
+.env
+.envstaging
+.envlocal
+.envproduction
 # C extensions
 *.so
 
