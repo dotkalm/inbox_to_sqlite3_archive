@@ -10,12 +10,15 @@ import time
 import json
 import email.utils as eut
 from actions.get_recipients import get_recipients
-
+import sqlite3
+conn = sqlite3.connect('hello2.sqlite3')
 load_dotenv()
-
+c = conn.cursor()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=30):
+def create_db():
+    c.execute('''CREATE TABLE stocks (date text, trans text, time integer, qty real, price real)''')
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=300):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -48,8 +51,6 @@ def gmail_archive_and_expunge(email_address):
         email_message = email.message_from_string(raw_email_string)
         parser = HeaderParser()
         h = parser.parsestr(raw_email_string)
-        for header_key in h.keys():
-            all_object['raw_'+header_key] = h[header_key]
         all_object = roles_with_subject(raw_email_string, all_object)
         date = email_message['Date']
         parsed = eut.parsedate(date)
@@ -60,27 +61,29 @@ def gmail_archive_and_expunge(email_address):
         file_string = email_id + '_' + str(int(time_value))
         file_names = []
         for part in email_message.walk():
-            if part.get_content_maintype() == 'multipart':
+            content_disposition = str(part.get("Content-Disposition"))
+            content_type = part.get_content_type()
+            if content_disposition == 'multipart':
                 continue
-            if part.get('Content-Disposition') is None:
+            if content_disposition is None:
                 continue
-            message_body = part.get_payload(i=None, decode=False)
-            if bool(message_body):
-                all_object['message_body'] = message_body
+            message_body = part.get_payload(i=None, decode=True)
+            if content_type == 'text/plain' and "attachment" not in content_disposition:
+                if bool(message_body):
+                    all_object['message_body'] = str(message_body)
             file_name = part.get_filename()
             if bool(file_name):
                 filename_unique = file_string + '_' + file_name
                 file_path = os.path.join(os.getcwd(), 'email_attachments_from_backup/' + filename_unique )
+                file_names.append(filename_unique)
                 if not os.path.isfile(file_path) :
                     fp = open(file_path, 'wb')
                     fp.write(part.get_payload(decode=True))
-                    file_names.append(filename_unique)
                     fp.close()
-        all_object['files'] = file_names 
+        all_object['files'] = ", ".join(file_names)
         all_object['uid'] = email_id
         return all_object
 
     for mail_id in mail_ids:
         msg = get_email_msg(mail_id)
-        print(msg, 85)
-
+        print(msg)

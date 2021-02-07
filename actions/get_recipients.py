@@ -5,15 +5,17 @@ ADDR_PATTERN = re.compile('<(.*?)>')
 
 def get_recipients(msg, recipients):
     """Given a parsed message, extract and return recipient list"""
-    msg_fields = ['From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Sender', 'Subject']
-
+    msg_fields = ['From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Sender', 'Subject', 'In-Reply-To', 'Message-ID','References']
     for f in msg_fields:
-        if f is msg_fields[-1]:
-            recipients[f] = msg[f] 
-            continue
         if msg[f] is None:
             continue
-        person = email.utils.parseaddr(msg[f])
-        recipients[f] = person 
+        if f == 'Subject' or f == 'Message-ID' or f == 'References':
+            recipients[f] = msg[f] 
+            continue
+        if f == 'Cc':
+            copies = msg[f]
+            recipients["Cc"] = copies
+        else:
+            recipients[f] = msg[f] 
 
     return recipients 
