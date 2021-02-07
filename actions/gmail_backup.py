@@ -6,7 +6,7 @@ from email.parser import HeaderParser
 import traceback 
 from dotenv import load_dotenv
 from datetime import datetime
-from models import insert_row, create_db
+from models import insert_row, create_db, field_map
 import models
 import time
 import json
@@ -15,7 +15,7 @@ from actions.get_recipients import get_recipients
 load_dotenv()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=300):
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=1):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -39,7 +39,7 @@ def get_gmail(email_address):
 def gmail_archive_and_expunge(email_address):
     gmail = get_gmail(email_address)
     mail_ids = get_email_ids(gmail)
-
+    header_keys = {}
     def get_email_msg(email_id):
         all_object = {}
         email_id = str(int(email_id))
@@ -81,8 +81,12 @@ def gmail_archive_and_expunge(email_address):
         all_object['files'] = ", ".join(file_names)
         all_object['uid'] = email_id
         return all_object
-
+    all_keys = {}
     for mail_id in mail_ids:
         msg = get_email_msg(mail_id)
-        print(msg)
-        insert_row(msg)
+        new_msg = {}
+        for key in msg.keys():
+            db_key = field_map[key]
+            new_msg[db_key] = msg[key]
+        insert_row(new_msg, 'inbox')
+
