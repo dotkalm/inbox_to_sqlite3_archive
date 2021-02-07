@@ -6,7 +6,7 @@ from email.parser import HeaderParser
 import traceback 
 from dotenv import load_dotenv
 from datetime import datetime
-from models import insert_row, create_db, field_map
+from models import insert_row, create_db, field_map, c
 import models
 import time
 import json
@@ -15,7 +15,7 @@ from actions.get_recipients import get_recipients
 load_dotenv()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=1):
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=10):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -28,16 +28,16 @@ def roles_with_subject(raw_email, return_object):
     recipients = get_recipients(email_message, return_object)
     return recipients
 
-def get_gmail(email_address):
+def get_gmail(email_address, table_name):
     SMTP_SERVER = "imap.gmail.com"
     SMTP_PORT = 993
     mail = imaplib.IMAP4_SSL(SMTP_SERVER)
     mail.login(email_address, password)
-    create_db()
+    create_db(table_name)
     return mail
 
-def gmail_archive_and_expunge(email_address):
-    gmail = get_gmail(email_address)
+def gmail_archive_and_expunge(email_address, table_name):
+    gmail = get_gmail(email_address, table_name)
     mail_ids = get_email_ids(gmail)
     header_keys = {}
     def get_email_msg(email_id):
@@ -86,7 +86,8 @@ def gmail_archive_and_expunge(email_address):
         msg = get_email_msg(mail_id)
         new_msg = {}
         for key in msg.keys():
-            db_key = field_map[key]
+            db_key = field_map[key][0]
             new_msg[db_key] = msg[key]
-        insert_row(new_msg, 'inbox')
+        insert_row(new_msg, table_name)
+    c.commit()
 

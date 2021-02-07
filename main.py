@@ -5,5 +5,5 @@ load_dotenv()
 
 email = os.getenv("GMAIL_ADDRESS")
 
-gmail_archive_and_expunge(email)
+gmail_archive_and_expunge(email, 'inbox')
 
