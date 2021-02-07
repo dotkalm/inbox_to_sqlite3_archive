@@ -62,9 +62,13 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-$argadd actions/gmail_backup.py
+$argadd main.py
 edit actions/gmail_backup.py
 set splitbelow splitright
+wincmd _ | wincmd |
+split
+1wincmd k
+wincmd w
 wincmd _ | wincmd |
 vsplit
 1wincmd h
@@ -76,8 +80,11 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 131 + 132) / 264)
-exe 'vert 2resize ' . ((&columns * 132 + 132) / 264)
+exe '1resize ' . ((&lines * 34 + 31) / 62)
+exe '2resize ' . ((&lines * 24 + 31) / 62)
+exe 'vert 2resize ' . ((&columns * 88 + 127) / 254)
+exe '3resize ' . ((&lines * 24 + 31) / 62)
+exe 'vert 3resize ' . ((&columns * 165 + 127) / 254)
 argglobal
 setlocal autoindent
 setlocal backupcopy=
@@ -194,15 +201,139 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 86 - ((49 * winheight(0) + 27) / 55)
+let s:l = 9 - ((8 * winheight(0) + 17) / 34)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-86
+9
+normal! 013|
+wincmd w
+argglobal
+if bufexists("models.py") | buffer models.py | else | edit models.py | endif
+setlocal autoindent
+setlocal backupcopy=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),0],:,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=b:#,fb:-
+setlocal commentstring=#\ %s
+setlocal complete=.,w,b,u,t,i
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal cursorlineopt=both
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'python'
+setlocal filetype=python
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+set nofoldenable
+setlocal nofoldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=^\\s*\\(from\\|import\\)
+setlocal includeexpr=substitute(substitute(substitute(v:fname,b:grandparent_match,b:grandparent_sub,''),b:parent_match,b:parent_sub,''),b:child_match,b:child_sub,'g')
+setlocal indentexpr=GetPythonIndent(v:lnum)
+setlocal indentkeys=0{,0},0),0],:,!^F,o,O,e,<:>,=elif,=except
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=pydoc
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=pythoncomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal nosmartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=.py
+setlocal noswapfile
+setlocal synmaxcol=3000
+if &syntax != 'python'
+setlocal syntax=python
+endif
+setlocal tabstop=8
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal undolevels=-123456
+setlocal wincolor=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 3 - ((2 * winheight(0) + 12) / 24)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+3
 normal! 0
 wincmd w
 argglobal
-if bufexists("actions/get_recipients.py") | buffer actions/get_recipients.py | else | edit actions/get_recipients.py | endif
+if bufexists("main.py") | buffer main.py | else | edit main.py | endif
 setlocal autoindent
 setlocal backupcopy=
 setlocal nobinary
@@ -318,20 +449,22 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 19 - ((18 * winheight(0) + 27) / 55)
+let s:l = 4 - ((3 * winheight(0) + 12) / 24)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-19
-normal! 022|
+4
+normal! 012|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 131 + 132) / 264)
-exe 'vert 2resize ' . ((&columns * 132 + 132) / 264)
+exe '1resize ' . ((&lines * 34 + 31) / 62)
+exe '2resize ' . ((&lines * 24 + 31) / 62)
+exe 'vert 2resize ' . ((&columns * 88 + 127) / 254)
+exe '3resize ' . ((&lines * 24 + 31) / 62)
+exe 'vert 3resize ' . ((&columns * 165 + 127) / 254)
 tabnext 1
-badd +1 actions/gmail_backup.py
-badd +1 actions/get_recipients.py
-badd +1 .gitignore
-badd +1 main.py
+badd +0 main.py
+badd +0 actions/gmail_backup.py
+badd +0 models.py
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

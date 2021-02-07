@@ -7,6 +7,7 @@ __pycache__/
 *$py.class
 .vim
 .env
+.sqlite3
 .envstaging
 .envlocal
 .envproduction

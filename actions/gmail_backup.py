@@ -6,18 +6,15 @@ from email.parser import HeaderParser
 import traceback 
 from dotenv import load_dotenv
 from datetime import datetime
+from models import insert_row, create_db
+import models
 import time
 import json
 import email.utils as eut
 from actions.get_recipients import get_recipients
-import sqlite3
-conn = sqlite3.connect('hello2.sqlite3')
 load_dotenv()
-c = conn.cursor()
 password = os.getenv("GMAIL_PASSWORD")
 
-def create_db():
-    c.execute('''CREATE TABLE stocks (date text, trans text, time integer, qty real, price real)''')
 def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=300):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
@@ -36,6 +33,7 @@ def get_gmail(email_address):
     SMTP_PORT = 993
     mail = imaplib.IMAP4_SSL(SMTP_SERVER)
     mail.login(email_address, password)
+    create_db()
     return mail
 
 def gmail_archive_and_expunge(email_address):
@@ -70,7 +68,7 @@ def gmail_archive_and_expunge(email_address):
             message_body = part.get_payload(i=None, decode=True)
             if content_type == 'text/plain' and "attachment" not in content_disposition:
                 if bool(message_body):
-                    all_object['message_body'] = str(message_body)
+                    all_object['body'] = str(message_body)
             file_name = part.get_filename()
             if bool(file_name):
                 filename_unique = file_string + '_' + file_name
@@ -87,3 +85,4 @@ def gmail_archive_and_expunge(email_address):
     for mail_id in mail_ids:
         msg = get_email_msg(mail_id)
         print(msg)
+        insert_row(msg)
