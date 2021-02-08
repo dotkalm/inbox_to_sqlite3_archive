@@ -15,13 +15,6 @@ from actions.get_recipients import get_recipients
 load_dotenv()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=1000):
-    mail.select(label)
-    type, data = mail.uid('search', None, "ALL") 
-    mail_ids = data[0]
-    id_list = mail_ids.split()
-    id_list = id_list[: min(len(id_list), max_mails_to_look)]
-    return id_list
 
 def roles_with_subject(raw_email, return_object):
     email_message = email.message_from_string(raw_email)
@@ -36,7 +29,14 @@ def get_gmail(email_address, table_name):
     create_db(table_name)
     return mail
 
-def gmail_archive_and_expunge(email_address, table_name):
+def gmail_archive_and_expunge(email_address, table_name, limit):
+    def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=limit):
+        mail.select(label)
+        type, data = mail.uid('search', None, "ALL") 
+        mail_ids = data[0]
+        id_list = mail_ids.split()
+        id_list = id_list[: min(len(id_list), max_mails_to_look)]
+        return id_list
     gmail = get_gmail(email_address, table_name)
     mail_ids = get_email_ids(gmail)
     header_keys = {}
