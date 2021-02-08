@@ -61,6 +61,7 @@ def gmail_archive_and_expunge(email_address, table_name):
             file_names = []
             original_file_names = []
             original_file_ext = []
+            number_of_attachments = 0
             for part in email_message.walk():
                 content_disposition = str(part.get("Content-Disposition"))
                 content_type = part.get_content_type()
@@ -75,10 +76,12 @@ def gmail_archive_and_expunge(email_address, table_name):
                 file_name = part.get_filename()
                 if bool(file_name):
                     f_name, f_ext = os.path.splitext(file_name)
-                    filename_unique = str(int(time_value)) + '_' + email_id + f_ext
+                    number_of_attachments = number_of_attachments + 1 
+                    filename_unique = str(int(time_value)) + '_' + str(number_of_attachments) + f_ext
+                    print(filename_unique)
                     file_path = os.path.join(os.getcwd(), 'email_attachments_from_backup/' + filename_unique)
                     file_names.append(filename_unique)
-                    original_file_names.append(file_name)
+                    original_file_names.append(f_name)
                     original_file_ext.append(f_ext)
                     if not os.path.isfile(file_path):
                         fp = open(file_path, 'wb')

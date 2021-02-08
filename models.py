@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('inboxFeb8.sqlite3')
+conn = sqlite3.connect('gmail_inbox.sqlite3')
 
 field_map = { 'From': ['from_person', 'TEXT'], 'To': ['to_person', 'TEXT'], 'Reply-To': ['reply_to', 'TEXT'], 'Sender': ['sender', 'TEXT'], 'Subject': ['subject', 'TEXT'], 'Message-ID': ['message_id', 'TEXT UNIQUE'], 'time': ['time', 'INTEGER NOT NULL'], 'body': ['body', 'TEXT'], 'file_names': ['file_names', 'TEXT'], 'original_file_names': ['original_file_names', 'TEXT'], 'original_file_ext': ['original_file_ext', 'TEXT'], 'uid': ['uid', 'TEXT'], 'In-Reply-To': ['in_reply_to', 'TEXT'], 'References': ['email_references', 'TEXT'], 'Bcc': ['b_c_c', 'TEXT'], 'Cc': ['c_c', 'TEXT'] }
 
@@ -37,7 +37,7 @@ def insert_row(row, table_name):
                 insert_string_tail = insert_string_tail + '?)'
         insert_string = insert_string_head + insert_string_tail 
         tup = tuple(row.values())
-        print(insert_string, tup)
+        print(tup)
         return c.execute(insert_string, tup)
     else:
         return ''
