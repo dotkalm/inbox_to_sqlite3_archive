@@ -15,7 +15,7 @@ from actions.get_recipients import get_recipients
 load_dotenv()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=3000):
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=1000):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -102,9 +102,8 @@ def gmail_archive_and_expunge(email_address, table_name):
             new_msg[db_key] = msg[key]
         insert_row(new_msg, table_name)
     success = gmail.expunge()
-    print(success)
     gmail.close()
     gmail.logout()
     conn.commit()
     c.close()
-    return mail_ids
+    return success 

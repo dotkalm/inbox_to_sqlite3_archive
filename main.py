@@ -5,6 +5,12 @@ load_dotenv()
 
 email = os.getenv("GMAIL_ADDRESS")
 
-ids = gmail_archive_and_expunge(email, 'inbox')
-print(ids)
+all_ids = () 
+def recursive_retrieve():
+    limit = 1000
+    ids = gmail_archive_and_expunge(email, 'inbox')
+    all_ids = all_ids + ids
+    if(len(ids[1]) == limit):
+        recursive_retrieve()
+
 
