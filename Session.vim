@@ -62,7 +62,7 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-$argadd actions/gmail_backup.py
+$argadd models.py
 edit models.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -76,8 +76,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 32 + 30) / 61)
-exe '2resize ' . ((&lines * 25 + 30) / 61)
+exe '1resize ' . ((&lines * 29 + 30) / 61)
+exe '2resize ' . ((&lines * 28 + 30) / 61)
 argglobal
 setlocal autoindent
 setlocal backupcopy=
@@ -194,12 +194,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 16) / 32)
+let s:l = 2 - ((1 * winheight(0) + 14) / 29)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 2
-normal! 030|
+normal! 033|
 wincmd w
 argglobal
 if bufexists("actions/gmail_backup.py") | buffer actions/gmail_backup.py | else | edit actions/gmail_backup.py | endif
@@ -238,7 +238,7 @@ endif
 setlocal fixendofline
 setlocal foldcolumn=0
 set nofoldenable
-setlocal nofoldenable
+setlocal foldenable
 setlocal foldexpr=0
 setlocal foldignore=#
 setlocal foldlevel=0
@@ -318,19 +318,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((1 * winheight(0) + 12) / 25)
+let s:l = 58 - ((27 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-18
-normal! 074|
+58
+normal! 055|
 wincmd w
-2wincmd w
-exe '1resize ' . ((&lines * 32 + 30) / 61)
-exe '2resize ' . ((&lines * 25 + 30) / 61)
+exe '1resize ' . ((&lines * 29 + 30) / 61)
+exe '2resize ' . ((&lines * 28 + 30) / 61)
 tabnext 1
-badd +3 models.py
-badd +78 actions/gmail_backup.py
+badd +43 models.py
+badd +0 actions/gmail_backup.py
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif

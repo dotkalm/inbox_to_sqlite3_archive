@@ -15,7 +15,7 @@ from actions.get_recipients import get_recipients
 load_dotenv()
 password = os.getenv("GMAIL_PASSWORD")
 
-def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=300):
+def get_email_ids(mail, label='INBOX', criteria='ALL', max_mails_to_look=3000):
     mail.select(label)
     type, data = mail.uid('search', None, "ALL") 
     mail_ids = data[0]
@@ -74,13 +74,12 @@ def gmail_archive_and_expunge(email_address, table_name):
                         all_object['body'] = str(message_body)
                 file_name = part.get_filename()
                 if bool(file_name):
-                    f_name, f_ext = os.path.splitext(filename)
-                    filename_unique = file_string + '_' + file_name + f_ext
+                    f_name, f_ext = os.path.splitext(file_name)
+                    filename_unique = str(int(time_value)) + '_' + email_id + f_ext
                     file_path = os.path.join(os.getcwd(), 'email_attachments_from_backup/' + filename_unique)
                     file_names.append(filename_unique)
                     original_file_names.append(file_name)
                     original_file_ext.append(f_ext)
-, f_name, f_ext]
                     if not os.path.isfile(file_path):
                         fp = open(file_path, 'wb')
                         if part.get_payload(decode=True):

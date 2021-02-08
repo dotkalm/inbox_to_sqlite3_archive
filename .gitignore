@@ -5,8 +5,10 @@ joelholmbergdotcom-firebase-adminsdk-8j2c3-3abe7eb64f.json
 __pycache__/
 *.py[cod]
 *$py.class
+*.vim
 .vim
 .env
+*.sqlite3
 .sqlite3
 .envstaging
 .envlocal
