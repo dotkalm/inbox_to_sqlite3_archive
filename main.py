@@ -8,7 +8,7 @@ email = os.getenv("GMAIL_ADDRESS")
 
 all_ids = () 
 def recursive_retrieve():
-    limit = 100
+    limit = 10
     ids = gmail_archive_and_expunge(email, 'inbox', limit)
     if(len(ids[1]) == limit):
         print(ids[1], 13)
