@@ -95,7 +95,7 @@ def gmail_archive_and_expunge(email_address, table_name, limit):
         return all_object
     for mail_id in mail_ids:
         msg = get_email_msg(mail_id)
-        gmail.store(mail_id, '+FLAGS', '\\Deleted')
+        gmail.uid('store', mail_id, '+FLAGS', '\\Deleted')
         new_msg = {}
         for key in msg.keys():
             db_key = field_map[key][0]
@@ -105,5 +105,4 @@ def gmail_archive_and_expunge(email_address, table_name, limit):
     gmail.close()
     gmail.logout()
     conn.commit()
-    c.close()
     return success 
