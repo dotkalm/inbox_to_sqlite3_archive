@@ -3,7 +3,6 @@ import time
 import imaplib
 import email
 from email.parser import HeaderParser
-import traceback 
 from dotenv import load_dotenv
 from datetime import datetime
 from models import insert_row, create_db, field_map, c, conn

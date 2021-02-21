@@ -1,7 +1,6 @@
 import email.utils as eut
 import re
 import email
-ADDR_PATTERN = re.compile('<(.*?)>')
 
 def get_recipients(msg, recipients):
     """Given a parsed message, extract and return recipient list"""

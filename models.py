@@ -41,3 +41,7 @@ def insert_row(row, table_name):
         return c.execute(insert_string, tup)
     else:
         return ''
+def count_rows():
+    amount = c.execute('SELECT COUNT (*) FROM inbox;')
+    rows = c.fetchall()
+    return rows[0] 
