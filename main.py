@@ -25,4 +25,3 @@ def upload_sqlite_blob(file_name):
     uploaded_file = upload_blob(file_path, 'db/' + file_name)
     print(uploaded_file)
     
-upload_sqlite_blob('gmail_inbox.sqlite3')
